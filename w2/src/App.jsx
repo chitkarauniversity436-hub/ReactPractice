@@ -1,28 +1,63 @@
-import React, { useState } from "react";
-
+import React, { useState ,useEffect } from "react";
 const App = () => {
-  const [form, setForm] = useState({ name: "", age: "" });
+    const[get,set]=useState("");
+    const[list,setList] = useState(JSON.parse(localStorage.getItem("list")) || []);
 
-  const runner = (f,v) => {
-    setForm({ ...form, [f] : v});
+    function add(){
+        let obj={
+            id : Date.now(),
+            text : get ,
+        }
+        setList([...list,obj]) ;
+        set("") ;
+    }
 
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault(); // stop page reload
-    alert("Your name is: " + form.name + " and age is: " + form.age);
-    setForm({name:"" , age:""}) // after submit clear the values from the input field  
-  };
+    function del(k1){
+        let o = list.filter((r)=>{
+            if(k1==r.id){
+                return false ; 
+            }
+            return true ;
+        }) 
+        setList(o);
+    }
 
-  return (
+    function edt(k2){
+        let pr = prompt("Enter value :") ;
+
+        let w1 = list.map((f)=>{
+            if(k2==f.id){
+                f.text = pr;
+            }
+            return f ;
+        })
+        setList(w1);
+    }
+
+    useEffect(()=>{
+        localStorage.setItem("list",JSON.stringify(list));
+    },[list])
+
+
+   return(
     <>
-      <form onSubmit={handleSubmit}>
-        <input type="text" name="name" value={form.name} onChange={(e)=>runner("name",e.target.value)} />
-        <input type="text" name="age" value={form.age} onChange={(e)=>runner("age" , e.target.value)} />
-        <button type="submit">Submit</button>
-      </form>
+    <h1> TO_DO_LIST</h1>
+     <input type="text"  onChange={(e)=>set(e.target.value)} />
+     <button onClick={add}>Add</button>
+
+       <ul>
+        {list.map((x)=>{
+         return <li>
+           <span>{x.text}</span>
+          <button onClick={()=>del(x.id)}>Delete</button>
+          <button onClick={()=>edt(x.id)}>Edit</button>
+         </li>
+        })}
+       </ul>
+
     </>
-  );
+   )
 };
 
 export default App;
