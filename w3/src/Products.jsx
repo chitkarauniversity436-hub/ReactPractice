@@ -6,7 +6,7 @@ const Products = ()=>{
         <>
         <h1>Products Page</h1>
         <ul >
-            <li> <Link  to="electronics" > Electronics</Link></li>
+            <li> <Link  to="electronics" > Electronics</Link></li>       //if possible make it dynamic
             <li> <Link to="clothing"> clothing</Link></li>
             <li> <Link to="Furtinuer"> Furtinuer</Link></li>
         </ul>
